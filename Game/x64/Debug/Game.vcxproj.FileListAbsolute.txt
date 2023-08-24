@@ -1,1 +1,2 @@
 C:\Users\Administrator\Desktop\Game\x64\Debug\Game.exe
+C:\Users\Administrator\Desktop\GameDINO\Game\x64\Debug\Game.exe

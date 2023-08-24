@@ -129,6 +129,10 @@
   <ItemGroup>
     <ClCompile Include="소스.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="다이노.h" />
+    <ClInclude Include="다이노2.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
