@@ -4,14 +4,15 @@
 #include<time.h>
 #define DINO_BOTTOM_Y 12
 #define TREE_BOTTOM_Y 20
-#define TREE_BOTTOM_X 45
-#define BIRD_BOTTOM_X 50
-#define BIRD_BOTTOM_Y 8
+#define TREE_BOTTOM_X 81
+
+#define BIRD_BOTTOM_X 105
+#define BIRD_BOTTOM_Y 9
 
 //콘솔 창의 크기와 제목을 지정하는 함수
 void SetConsoleView()
 {
-    system("mode con:cols=100 lines=25");
+    system("mode con:cols=150 lines=25");
     system("title Google Dinosaurs. By BlockDMask.");
 }
 
@@ -63,6 +64,35 @@ void DrawDino(int dinoY)
         legFlag = true;
     }
 }
+void DrawDino1(int dinoY)
+{
+    GotoXY(0, dinoY);
+    static bool legFlag = true;
+
+    printf("       $                                  \n");
+    printf("       $$                              \n");
+    printf("       $$$                        \n");
+    printf("       $$$              $$$$$$$         \n");
+    printf("        $$$$$$$$$$$$$  $$ $$$$$$              \n");
+    printf("        $$$$$$$$$$$$$$ $$$$$$$$$          \n");
+    printf("         $$$$$$$$$$$    $$$        \n");
+    printf("          $$$$$$$$     $$$$$$$            \n");
+    printf("                 $                              \n");
+    printf("                 $                               \n");
+    if (legFlag)
+    {
+        printf("   $    $$$\n");
+        printf("   $$         ");
+        legFlag = false;
+    }
+    else
+    {
+        printf(" $$$    $    \n");
+        printf("        $$     ");
+        legFlag = true;
+    }
+}
+
 
 //나무를 그리는 함수
 void DrawTree(int treeX)
@@ -78,18 +108,18 @@ void DrawTree(int treeX)
     GotoXY(treeX, TREE_BOTTOM_Y + 4);
     printf(" $$ ");
 }
-void Bird(int birdX)
+void Bird(int birdY)
 {
-    GotoXY(birdX, BIRD_BOTTOM_Y);
-    printf("   §§§§");
-    GotoXY(birdX, BIRD_BOTTOM_Y + 1);
-    printf("  §§§");
-    GotoXY(birdX, BIRD_BOTTOM_Y + 2);
-    printf("§§§§§§§§§");
-    GotoXY(birdX, BIRD_BOTTOM_Y + 3);
-    printf("  §§§");
-    GotoXY(birdX, BIRD_BOTTOM_Y + 4);
-    printf("   §§§§");
+    GotoXY(birdY, BIRD_BOTTOM_Y);
+    printf("   $$$$");
+    GotoXY(birdY, BIRD_BOTTOM_Y + 1);
+    printf("  $$$");
+    GotoXY(birdY, BIRD_BOTTOM_Y + 2);
+    printf("$$$$$$$$");
+    GotoXY(birdY, BIRD_BOTTOM_Y + 3);
+    printf("  $$$");
+    GotoXY(birdY, BIRD_BOTTOM_Y + 4);
+    printf("   $$$$");
 }
 //(v2.0) 충돌 했을때 게임오버 그려줌
 void DrawGameOver(const int score)
@@ -111,19 +141,26 @@ void DrawGameOver(const int score)
 }
 
 //(v2.0) 충돌했으면 true, 아니면 false
-bool isCollision(const int treeX,const int dinoY)
+bool isCollision(const int treeX,const int dinoY,const int birdY,const int birdX)
 {
     //트리의 X가 공룡의 몸체쪽에 있을때,
     //공룡의 높이가 충분하지 않다면 충돌로 처리
     GotoXY(0, 0);
-    printf("treeX : %d, dinoY : %d", treeX,dinoY); //이런식으로 적절한 X, Y를 찾습니다.
-    if (treeX <= 8 && treeX >= 4 && dinoY  > 8)
+    printf("treeX : %d, dinoY : %d  ", treeX,dinoY); //이런식으로 적절한 X, Y를 찾습니다.
+    if (treeX <= 5 && treeX >= 3 && dinoY  > 8)
+    {
+        return true;
+    }
+    printf("  birdX : %d", birdY);
+    if (birdY <= 12 && dinoY < 12)
     {
         return true;
     }
     
     return false;
 }
+
+
 
 int main()
 {
@@ -134,11 +171,15 @@ int main()
         //게임 시작시 초기화
         bool isJumping = false;
         bool isBottom = true;
+        bool isDown = false;
+        bool isUp = true;
+
         const int gravity = 3;
 
         int dinoY = DINO_BOTTOM_Y;
         int treeX = TREE_BOTTOM_X;
         int birdY = BIRD_BOTTOM_Y;
+        int birdX = BIRD_BOTTOM_X;
         int score = 0;
         clock_t start, curr;    //점수 변수 초기화
         start = clock();        //시작시간 초기화
@@ -146,7 +187,7 @@ int main()
         while (true)    //한 판에 대한 루프
         {
             //(v2.0) 충돌체크 트리의 x값과 공룡의 y값으로 판단
-            if (isCollision(treeX, dinoY))
+            if (isCollision(treeX, dinoY,birdY,birdX))
                 break;
 
             //z키가 눌렸고, 바닥이 아닐때 점프
@@ -155,6 +196,19 @@ int main()
                 isJumping = true;
                 isBottom = false;
             }
+            if (GetKeyDown() == 'x' && isDown)
+            {
+                isDown = true;
+                isUp = false;
+            }
+           // if (isDown)
+           // {
+           //     dinoY += gravity;
+           // }
+           // else
+           // {
+           //     dinoY -= gravity;
+           // }
 
             //점프중이라면 Y를 감소, 점프가 끝났으면 Y를 증가.
             if (isJumping)
@@ -172,6 +226,12 @@ int main()
                 dinoY = DINO_BOTTOM_Y;
                 isBottom = true;
             }
+            // Y가 계속해서 감소하는걸 막기위해 천장을 지정
+           // if (dinoY <= DINO_BOTTOM_Y)
+           // {
+           //     dinoY = DINO_BOTTOM_Y;
+           //     isDown = true;
+           // }
 
             //나무가 왼쪽으로 (x음수) 가도록하고
             //나무의 위치가 왼쪽 끝으로가면 다시 오른쪽 끝으로 소환.
@@ -185,6 +245,8 @@ int main()
             {
                 birdY = BIRD_BOTTOM_X;
             }
+            
+
             //점프의 맨위를 찍으면 점프가 끝난 상황.
             if (dinoY <= 3)
             {
