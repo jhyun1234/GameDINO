@@ -9,18 +9,18 @@
 #define BIRD_BOTTOM_X 105
 #define BIRD_BOTTOM_Y 9
 
-//콘솔 창의 크기와 제목을 지정하는 함수
+//콘솔 창의 크기 지정하는 함수
 void SetConsoleView()
 {
     system("mode con:cols=150 lines=25");
-    system("title Google Dinosaurs. By BlockDMask.");
+    
 }
 
 //커서의 위치를 x, y로 이동하는 함수
 void GotoXY(int x, int y)
 {
     COORD Pos;
-    Pos.X = 2 * x;
+    Pos.X = 3 * x;
     Pos.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
@@ -69,16 +69,16 @@ void DrawDino1(int dinoY)
     GotoXY(0, dinoY);
     static bool legFlag = true;
 
-    printf("       $                                  \n");
-    printf("       $$                              \n");
-    printf("       $$$                        \n");
-    printf("       $$$              $$$$$$$         \n");
-    printf("        $$$$$$$$$$$$$  $$ $$$$$$              \n");
-    printf("        $$$$$$$$$$$$$$ $$$$$$$$$          \n");
-    printf("         $$$$$$$$$$$    $$$        \n");
-    printf("          $$$$$$$$     $$$$$$$            \n");
-    printf("                 $                              \n");
-    printf("                 $                               \n");
+    printf("$                                \n");
+    printf("$$                            \n");
+    printf("$$$                      \n");
+    printf("$$$              $$$$$$$       \n");
+    printf(" $$$$$$$$$$$$$  $$ $$$$$$            \n");
+    printf(" $$$$$$$$$$$$$$ $$$$$$$$$        \n");
+    printf("  $$$$$$$$$$$    $$$      \n");
+    printf("   $$$$$$$$     $$$$$$$          \n");
+    printf("          $                            \n");
+    printf("          $                             \n");
     if (legFlag)
     {
         printf("   $    $$$\n");
@@ -108,6 +108,7 @@ void DrawTree(int treeX)
     GotoXY(treeX, TREE_BOTTOM_Y + 4);
     printf(" $$ ");
 }
+// 새를 그리는 함수
 void Bird(int birdY)
 {
     GotoXY(birdY, BIRD_BOTTOM_Y);
@@ -121,7 +122,7 @@ void Bird(int birdY)
     GotoXY(birdY, BIRD_BOTTOM_Y + 4);
     printf("   $$$$");
 }
-//(v2.0) 충돌 했을때 게임오버 그려줌
+// 충돌 했을때 게임오버 그려줌
 void DrawGameOver(const int score)
 {
     system("cls");
@@ -140,11 +141,16 @@ void DrawGameOver(const int score)
     system("pause");
 }
 
-//(v2.0) 충돌했으면 true, 아니면 false
+// 충돌했으면 true, 아니면 false
 bool isCollision(const int treeX,const int dinoY,const int birdY,const int birdX)
 {
-    //트리의 X가 공룡의 몸체쪽에 있을때,
-    //공룡의 높이가 충분하지 않다면 충돌로 처리
+    // 트리의 X가 공룡의 몸체쪽에 있을때,
+    // 공룡의 높이가 충분하지 않다면 충돌로 처리
+
+    // 공룡이 점프시 새의 Y에 있을 시 충돌로 처리 
+    // 아직 새가 공룡의 머리를 맞을때 게임오버가 되는건 구현하지 못함
+    // 숙이는 모습을 만들었지만 변환하는 방법을 모르겠음
+    
     GotoXY(0, 0);
     printf("treeX : %d, dinoY : %d  ", treeX,dinoY); //이런식으로 적절한 X, Y를 찾습니다.
     if (treeX <= 5 && treeX >= 3 && dinoY  > 8)
@@ -233,13 +239,16 @@ int main()
            //     isDown = true;
            // }
 
-            //나무가 왼쪽으로 (x음수) 가도록하고
-            //나무의 위치가 왼쪽 끝으로가면 다시 오른쪽 끝으로 소환.
+            // 나무가 왼쪽으로 (x음수) 가도록하고
+            // 나무의 위치가 왼쪽 끝으로가면 다시 오른쪽 끝으로 소환.
             treeX -= 2;
             if (treeX <= 0)
             {
                 treeX = TREE_BOTTOM_X;
             }
+            // 새가 왼쪽으로 가도록하고
+            // 새의 위치가 왼쪽 끝으로가면 다시 오른쪽으로 끝으로 소환.
+            
             birdY -= 1;
             if (birdY <= 0)
             {
@@ -253,10 +262,10 @@ int main()
                 isJumping = false;
             }
 
-            DrawDino(dinoY);        //draw dino
-            DrawTree(treeX);        //draw Tree
-            Bird(birdY);
-            //(v2.0)
+            DrawDino(dinoY);        // draw dino
+            DrawTree(treeX);        // draw Tree
+            Bird(birdY);            // draw Bird
+            
             curr = clock();            //현재시간 받아오기
             if (((curr - start) / CLOCKS_PER_SEC) >= 1)    // 1초가 넘었을떄
             {
@@ -266,7 +275,7 @@ int main()
             Sleep(60);
             system("cls");    //clear
 
-            //(v2.0) 점수출력을 1초마다 해주는것이 아니라 항상 출력해주면서, 1초가 지났을때 ++ 해줍니다.
+            // 점수출력을 1초마다 해주는것이 아니라 항상 출력해주면서, 1초가 지났을때 ++ 해줍니다.
             GotoXY(22, 0);    //커서를 가운데 위쪽으로 옮긴다. 콘솔창이 cols=100이니까 2*x이므로 22정도 넣어줌
             printf("Score : %d ", score);    //점수 출력해줌.
         }
