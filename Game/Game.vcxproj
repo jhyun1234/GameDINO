@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="다이노.h" />
     <ClInclude Include="다이노2.h" />
+    <ClInclude Include="다이노6 2023.08.29.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

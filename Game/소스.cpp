@@ -4,7 +4,7 @@
 #include<time.h>
 #define DINO_BOTTOM_Y 12
 #define TREE_BOTTOM_Y 20
-#define TREE_BOTTOM_X 81
+#define TREE_BOTTOM_X 80
 
 #define BIRD_BOTTOM_X 105
 #define BIRD_BOTTOM_Y 9
@@ -87,8 +87,8 @@ void DrawDino1(int dinoY)
     }
     else
     {
-        printf(" $$$    $    \n");
-        printf("        $$     ");
+        printf("   $$$     $    \n");
+        printf("           $$     ");
         legFlag = true;
     }
 }
@@ -152,7 +152,7 @@ bool isCollision(const int treeX,const int dinoY,const int birdY,const int birdX
     // 숙이는 모습을 만들었지만 변환하는 방법을 모르겠음
     
     GotoXY(0, 0);
-    printf("treeX : %d, dinoY : %d  ", treeX,dinoY); //이런식으로 적절한 X, Y를 찾습니다.
+    printf("treeX : %d, dinoY : %d  ", treeX,dinoY); 
     if (treeX <= 5 && treeX >= 3 && dinoY  > 8)
     {
         return true;
@@ -172,15 +172,19 @@ int main()
 {
     SetConsoleView();
 
-    while (true)        //(v2.0) 게임 루프
+    while (true)        
     {
         //게임 시작시 초기화
+
         bool isJumping = false;
         bool isBottom = true;
         bool isDown = false;
         bool isUp = true;
 
         const int gravity = 3;
+
+        char szChoice = 0;
+       
 
         int dinoY = DINO_BOTTOM_Y;
         int treeX = TREE_BOTTOM_X;
@@ -198,15 +202,18 @@ int main()
 
             //z키가 눌렸고, 바닥이 아닐때 점프
             if (GetKeyDown() == 'z' && isBottom)
-            {
+            { 
+                
                 isJumping = true;
                 isBottom = false;
             }
-            if (GetKeyDown() == 'x' && isDown)
+            else if (GetKeyDown() == 'x' && isBottom)
             {
-                isDown = true;
-                isUp = false;
+                system("cls");
+                DrawDino1(dinoY);
             }
+            
+            
            // if (isDown)
            // {
            //     dinoY += gravity;
@@ -215,7 +222,7 @@ int main()
            // {
            //     dinoY -= gravity;
            // }
-
+            
             //점프중이라면 Y를 감소, 점프가 끝났으면 Y를 증가.
             if (isJumping)
             {
@@ -262,6 +269,8 @@ int main()
                 isJumping = false;
             }
 
+
+                  // draw dino1
             DrawDino(dinoY);        // draw dino
             DrawTree(treeX);        // draw Tree
             Bird(birdY);            // draw Bird
@@ -276,11 +285,11 @@ int main()
             system("cls");    //clear
 
             // 점수출력을 1초마다 해주는것이 아니라 항상 출력해주면서, 1초가 지났을때 ++ 해줍니다.
-            GotoXY(22, 0);    //커서를 가운데 위쪽으로 옮긴다. 콘솔창이 cols=100이니까 2*x이므로 22정도 넣어줌
+            GotoXY(22, 0);    //커서를 가운데 위쪽으로 옮긴다. 콘솔창이 cols=150이니까 3*x이므로 22정도 넣어줌
             printf("Score : %d ", score);    //점수 출력해줌.
         }
 
-        //(v2.0) 게임 오버 메뉴
+        
         DrawGameOver(score);
     }
     return 0;
