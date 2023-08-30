@@ -4,7 +4,7 @@
 #include<time.h>
 #define DINO_BOTTOM_Y 12
 #define TREE_BOTTOM_Y 20
-#define TREE_BOTTOM_X 80
+#define TREE_BOTTOM_X 83
 
 #define BIRD_BOTTOM_X 105
 #define BIRD_BOTTOM_Y 9
@@ -20,7 +20,7 @@ void SetConsoleView()
 void GotoXY(int x, int y)
 {
     COORD Pos;
-    Pos.X = 3 * x;
+    Pos.X = 2 * x;
     Pos.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
@@ -126,7 +126,7 @@ void Bird(int birdY)
 void DrawGameOver(const int score)
 {
     system("cls");
-    int x = 18;
+    int x = 30;
     int y = 8;
     GotoXY(x, y);
     printf("===========================");
@@ -149,7 +149,7 @@ bool isCollision(const int treeX,const int dinoY,const int birdY,const int birdX
 
     // 공룡이 점프시 새의 Y에 있을 시 충돌로 처리 
     // 아직 새가 공룡의 머리를 맞을때 게임오버가 되는건 구현하지 못함
-    // 숙이는 모습을 만들었지만 변환하는 방법을 모르겠음
+    // 숙이는 모습을 만들었지만 변환하지는 못함
     
     GotoXY(0, 0);
     printf("treeX : %d, dinoY : %d  ", treeX,dinoY); 
@@ -183,7 +183,7 @@ int main()
 
         const int gravity = 3;
 
-        char szChoice = 0;
+        
        
 
         int dinoY = DINO_BOTTOM_Y;
@@ -196,7 +196,7 @@ int main()
 
         while (true)    //한 판에 대한 루프
         {
-            //(v2.0) 충돌체크 트리의 x값과 공룡의 y값으로 판단
+            // 충돌체크 트리의 x값과 공룡의 y값으로 판단
             if (isCollision(treeX, dinoY,birdY,birdX))
                 break;
 
@@ -285,7 +285,7 @@ int main()
             system("cls");    //clear
 
             // 점수출력을 1초마다 해주는것이 아니라 항상 출력해주면서, 1초가 지났을때 ++ 해줍니다.
-            GotoXY(22, 0);    //커서를 가운데 위쪽으로 옮긴다. 콘솔창이 cols=150이니까 3*x이므로 22정도 넣어줌
+            GotoXY(22, 0);    //커서를 가운데 위쪽으로 옮긴다. 콘솔창이 cols=150이니까 2*x이므로 22정도 넣어줌
             printf("Score : %d ", score);    //점수 출력해줌.
         }
 
