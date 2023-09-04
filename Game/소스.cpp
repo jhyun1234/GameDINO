@@ -6,7 +6,7 @@
 #define TREE_BOTTOM_Y 20
 #define TREE_BOTTOM_X 83
 
-#define BIRD_BOTTOM_X 105
+#define BIRD_BOTTOM_X 94
 #define BIRD_BOTTOM_Y 9
 
 //콘솔 창의 크기 지정하는 함수
